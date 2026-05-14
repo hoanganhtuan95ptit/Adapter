@@ -7,6 +7,7 @@ import androidx.transition.TransitionListenerAdapter
 import androidx.transition.TransitionManager
 import com.simple.adapter.MultiAdapter
 import com.simple.adapter.ViewItem
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.suspendCancellableCoroutine
 
 // Dùng -1 làm sentinel value để đánh dấu toàn bộ list thay đổi (onChanged)
@@ -20,6 +21,7 @@ private const val FULL_CHANGE_MARKER = -1
  * @param isAnimation  Nếu true, chạy AutoTransition cho các item thay đổi visible trên màn hình.
  * @param ignoreTransitionViewId Danh sách view id sẽ bị loại khỏi hiệu ứng transition.
  */
+@OptIn(ExperimentalCoroutinesApi::class)
 @Suppress("UNCHECKED_CAST")
 suspend fun RecyclerView.submitListAndAwait(
     viewItemList: List<ViewItem>,

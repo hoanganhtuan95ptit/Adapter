@@ -17,6 +17,7 @@ plugins {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        mavenLocal() // Ưu tiên resolve từ local trước khi tìm trên remote
         google()
         mavenCentral()
         maven { url 'https://jitpack.io' }

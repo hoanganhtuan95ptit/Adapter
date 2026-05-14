@@ -108,14 +108,25 @@ class AdapterProcessor(
      * @return Danh sách symbol chưa resolve — sẽ được xử lý lại ở round sau.
      */
     override fun process(resolver: Resolver): List<KSAnnotated> {
+        logger.warn("[AdapterProcessor] process() called")
+
         val symbols = resolver.getSymbolsWithAnnotation(ADAPTER_ANNOTATION)
-        val validAdapters = collectValidAdapters(symbols)
+        val symbolList = symbols.toList()
+        logger.warn("[AdapterProcessor] found ${symbolList.size} symbol(s) with @Adapter")
+        symbolList.forEach { logger.warn("[AdapterProcessor]   symbol: $it") }
+
+        val validAdapters = collectValidAdapters(symbolList.asSequence())
+        logger.warn("[AdapterProcessor] valid adapters: ${validAdapters.size}")
 
         if (validAdapters.isNotEmpty()) {
             generate(validAdapters)
+        } else {
+            logger.warn("[AdapterProcessor] no valid adapters found — skipping code generation")
         }
 
-        return symbols.filterNot { it.validate() }.toList()
+        val deferred = symbolList.filterNot { it.validate() }
+        logger.warn("[AdapterProcessor] deferred (unresolved) symbols: ${deferred.size}")
+        return deferred
     }
 
     // ─── Collect ──────────────────────────────────────────────────────────────
@@ -134,7 +145,16 @@ class AdapterProcessor(
     private fun collectValidAdapters(symbols: Sequence<KSAnnotated>): List<KSClassDeclaration> {
         return symbols
             .filterIsInstance<KSClassDeclaration>()
-            .filter { it.validate() }
+            .also { seq ->
+                val nonClass = symbols.filterNot { it is KSClassDeclaration }.toList()
+                if (nonClass.isNotEmpty())
+                    logger.warn("[AdapterProcessor] skipped ${nonClass.size} non-class symbol(s): $nonClass")
+            }
+            .filter {
+                val ok = it.validate()
+                if (!ok) logger.warn("[AdapterProcessor] not yet resolvable (will retry): ${it.qualifiedName?.asString()}")
+                ok
+            }
             .filter { validateAdapter(it) }
             .toList()
     }
@@ -169,6 +189,8 @@ class AdapterProcessor(
                 "@Adapter không thể dùng trên abstract/sealed class: ${classDecl.simpleName.asString()}",
                 classDecl
             )
+        } else {
+            logger.warn("[AdapterProcessor] validated OK: ${classDecl.qualifiedName?.asString()}")
         }
 
         return !isAbstractOrSealed
@@ -200,6 +222,11 @@ class AdapterProcessor(
             .split("-", "_")
             .joinToString("") { it.replaceFirstChar { c -> c.uppercase() } }
         val className = "${pascal}ViewItemAdapterProvider"
+
+        logger.warn("[AdapterProcessor] generating → package=$packageName, class=$className")
+        logger.warn("[AdapterProcessor] firstFilePath=$firstFilePath")
+        logger.warn("[AdapterProcessor] moduleName=$moduleName (from ${if (options.containsKey("moduleName")) "ksp option" else "file path"})")
+        logger.warn("[AdapterProcessor] adapters: ${classDecls.map { it.simpleName.asString() }}")
 
         val fileSpec = buildFileSpec(packageName, className, classDecls)
         writeToFile(fileSpec, packageName, className, classDecls)
@@ -361,12 +388,17 @@ class AdapterProcessor(
             *classDecls.mapNotNull { it.containingFile }.toTypedArray()
         )
 
-        codeGenerator.createNewFile(
-            dependencies = dependencies,
-            packageName = packageName,
-            fileName = className,
-        ).bufferedWriter().use { writer ->
-            fileSpec.writeTo(writer)
+        try {
+            codeGenerator.createNewFile(
+                dependencies = dependencies,
+                packageName = packageName,
+                fileName = className,
+            ).bufferedWriter().use { writer ->
+                fileSpec.writeTo(writer)
+            }
+            logger.warn("[AdapterProcessor] file written: $packageName.$className")
+        } catch (e: Exception) {
+            logger.error("[AdapterProcessor] FAILED to write file $packageName.$className: ${e.message}")
         }
     }
 }

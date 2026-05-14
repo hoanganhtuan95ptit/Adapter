@@ -12,7 +12,13 @@ Thư viện **Adapter** (`com.github.hoanganhtuan95ptit.Adapter`) giúp quản l
 
 ## Cài đặt
 
-### settings.gradle
+> **Lưu ý groupId:** JitPack và mavenLocal dùng groupId **khác nhau**.
+> - JitPack: `com.github.hoanganhtuan95ptit.Adapter` (có `.Adapter` ở cuối)
+> - mavenLocal: `com.github.hoanganhtuan95ptit` (không có `.Adapter`)
+
+### Cách 1 — JitPack (production)
+
+#### settings.gradle
 
 ```groovy
 dependencyResolutionManagement {
@@ -25,7 +31,7 @@ dependencyResolutionManagement {
 }
 ```
 
-### build.gradle (module)
+#### build.gradle (module)
 
 ```groovy
 plugins {
@@ -34,7 +40,37 @@ plugins {
 
 dependencies {
     implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:x.y.z'
-    ksp         'com.github.hoanganhtuan95ptit:Adapter:adapter-processor:x.y.z'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:x.y.z'
+}
+```
+
+### Cách 2 — mavenLocal (test local)
+
+Publish lên máy trước bằng lệnh: `./gradlew publishToMavenLocal`
+
+#### settings.gradle
+
+```groovy
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal() // đặt trước google/mavenCentral để ưu tiên resolve local
+        google()
+        mavenCentral()
+    }
+}
+```
+
+#### build.gradle (module)
+
+```groovy
+plugins {
+    alias(libs.plugins.ksp)
+}
+
+dependencies {
+    implementation 'com.github.hoanganhtuan95ptit:adapter:1.0.2'
+    ksp         'com.github.hoanganhtuan95ptit:adapter-processor:1.0.2'
 }
 ```
 

@@ -6,3 +6,11 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.ksp) apply false
 }
+
+// Group và version dùng chung cho tất cả module khi publish
+// Để test local: ./gradlew publishToMavenLocal
+// Để publish lên JitPack: push tag lên GitHub, JitPack tự build
+subprojects {
+    group = "com.github.hoanganhtuan95ptit"
+    version = "1.0.2"
+}

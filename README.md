@@ -22,7 +22,7 @@ MultiRecyclerView hiển thị đúng adapter cho từng ViewItem
 
 ## Cài đặt
 
-### 1. Thêm dependency
+### Cách 1 — JitPack (production)
 
 ```groovy
 // settings.gradle
@@ -43,8 +43,38 @@ plugins {
 }
 
 dependencies {
+    // groupId trên JitPack = com.github.{username}.{RepoName}
     implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:x.y.z'
-    ksp         'com.github.hoanganhtuan95ptit:Adapter:adapter-processor:x.y.z'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:x.y.z'
+}
+```
+
+### Cách 2 — mavenLocal (test local)
+
+Publish lên máy trước: `./gradlew publishToMavenLocal`
+
+```groovy
+// settings.gradle
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        mavenLocal() // phải đặt trước google/mavenCentral để ưu tiên resolve local
+        google()
+        mavenCentral()
+    }
+}
+```
+
+```groovy
+// build.gradle (module)
+plugins {
+    alias(libs.plugins.ksp)
+}
+
+dependencies {
+    // groupId local = com.github.hoanganhtuan95ptit (không có .Adapter)
+    implementation 'com.github.hoanganhtuan95ptit:adapter:1.0.2'
+    ksp         'com.github.hoanganhtuan95ptit:adapter-processor:1.0.2'
 }
 ```
 
