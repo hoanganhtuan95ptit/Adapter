@@ -12,5 +12,5 @@ plugins {
 // Để publish lên JitPack: push tag lên GitHub, JitPack tự build
 subprojects {
     group = "com.github.hoanganhtuan95ptit"
-    version = "1.0.2"
+    version = "1.0.4"
 }

@@ -54,7 +54,7 @@ class MultiAdapter() : BaseAsyncAdapter<ViewItem, ViewBinding>() {
 
         val itemClass = getItem(position)?.javaClass ?: NoneViewItem::class.java
 
-        return viewItemClassAndType[itemClass] ?: error("not found impl viewtype for ${itemClass.name}")
+        return viewItemClassAndType[itemClass] ?: viewItemClassAndType[NoneViewItem::class.java] ?: error("not found impl viewtype for ${itemClass.name}")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ViewBinding> {
