@@ -1,6 +1,8 @@
 package com.simple.adapter
 
-abstract class ViewItemAdapterProvider {
+import com.simple.auto.register.AutoKeep
+
+abstract class ViewItemAdapterProvider : AutoKeep {
 
     abstract fun provider(): List<String>
 }
