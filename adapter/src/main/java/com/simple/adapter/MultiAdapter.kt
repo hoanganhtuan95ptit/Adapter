@@ -5,14 +5,13 @@ import androidx.viewbinding.ViewBinding
 import com.simple.adapter.base.BaseAsyncAdapter
 import com.simple.adapter.base.BaseBindingViewHolder
 import com.simple.adapter.def.NoneAdapter
-import com.simple.adapter.def.NoneViewItem
 
 class MultiAdapter() : BaseAsyncAdapter<ViewItem, ViewBinding>() {
 
     private val adapterClassNames = ArrayList<String>()
 
     private val typeAndAdapter = HashMap<Int, ViewItemAdapterDelegate>()
-    private val viewItemClassAndType = HashMap<Class<*>, Int>()
+    private val viewItemClassAndType = HashMap<String, Int>()
 
 
     init {
@@ -21,9 +20,9 @@ class MultiAdapter() : BaseAsyncAdapter<ViewItem, ViewBinding>() {
     }
 
 
-    fun submitList(list: List<ViewItem?>?, adapter: List<String> = emptyList(), commitCallback: Runnable? = null) {
+    fun submitList(list: List<ViewItem>, adapter: List<String> = emptyList(), commitCallback: Runnable? = null) {
         registerAdapters(adapter)
-        super.submitList(list, commitCallback)
+        super.submitList(list.filter { it.javaClass.name in viewItemClassAndType.keys }, commitCallback)  // to
     }
 
     private fun registerAdapters(adapter: List<String>) {
@@ -38,7 +37,7 @@ class MultiAdapter() : BaseAsyncAdapter<ViewItem, ViewBinding>() {
 
         val viewType = adapterClassNames.size
         typeAndAdapter[viewType] = delegate
-        viewItemClassAndType[delegate.viewItemClass] = viewType
+        viewItemClassAndType[delegate.viewItemClass.name] = viewType
     }
 
     override fun submitList(list: List<ViewItem?>?) {
@@ -52,9 +51,9 @@ class MultiAdapter() : BaseAsyncAdapter<ViewItem, ViewBinding>() {
 
     override fun getItemViewType(position: Int): Int {
 
-        val itemClass = getItem(position)?.javaClass ?: NoneViewItem::class.java
+        val itemClassName = getItem(position)?.javaClass?.name.orEmpty()
 
-        return viewItemClassAndType[itemClass] ?: viewItemClassAndType[NoneViewItem::class.java] ?: error("not found impl viewtype for ${itemClass.name}")
+        return viewItemClassAndType[itemClassName] ?: error("not found impl viewtype for ${itemClassName}")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseBindingViewHolder<ViewBinding> {
