@@ -11,6 +11,6 @@ plugins {
 // Để test local: ./gradlew publishToMavenLocal
 // Để publish lên JitPack: push tag lên GitHub, JitPack tự build
 subprojects {
-    group = "com.github.hoanganhtuan95ptit"
-    version = "1.0.5.2"
+    group = "com.github.hoanganhtuan95ptit.Adapter"
+    version = "1.2.1.10"
 }

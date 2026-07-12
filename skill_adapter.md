@@ -39,8 +39,8 @@ plugins {
 }
 
 dependencies {
-    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:x.y.z'
-    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:x.y.z'
+    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:1.2.1.10'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:1.2.1.10'
 }
 ```
 
@@ -69,8 +69,8 @@ plugins {
 }
 
 dependencies {
-    implementation 'com.github.hoanganhtuan95ptit:adapter:1.0.2'
-    ksp         'com.github.hoanganhtuan95ptit:adapter-processor:1.0.2'
+    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:1.2.1.10'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:1.2.1.10'
 }
 ```
 

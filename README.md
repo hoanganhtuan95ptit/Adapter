@@ -44,8 +44,8 @@ plugins {
 
 dependencies {
     // groupId trên JitPack = com.github.{username}.{RepoName}
-    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:x.y.z'
-    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:x.y.z'
+    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:1.2.1.10'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:1.2.1.10'
 }
 ```
 
@@ -72,9 +72,9 @@ plugins {
 }
 
 dependencies {
-    // groupId local = com.github.hoanganhtuan95ptit (không có .Adapter)
-    implementation 'com.github.hoanganhtuan95ptit:adapter:1.0.2'
-    ksp         'com.github.hoanganhtuan95ptit:adapter-processor:1.0.2'
+    // groupId local = com.github.hoanganhtuan95ptit.Adapter
+    implementation 'com.github.hoanganhtuan95ptit.Adapter:adapter:1.2.1.10'
+    ksp         'com.github.hoanganhtuan95ptit.Adapter:adapter-processor:1.2.1.10'
 }
 ```
 
