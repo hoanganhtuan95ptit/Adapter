@@ -5,6 +5,10 @@ plugins {
     id 'maven-publish'
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     namespace 'com.simple.adapter.register'
     compileSdk 35
@@ -31,14 +35,12 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
     publishing {
         singleVariant("release")
-    }
-}
-
-kotlin {
-    compilerOptions {
-        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
