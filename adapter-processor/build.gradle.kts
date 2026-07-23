@@ -1,22 +1,25 @@
 plugins {
-    id 'java-library'
-    id 'org.jetbrains.kotlin.jvm'
-    id 'maven-publish'
+    id("java-library")
+    id("org.jetbrains.kotlin.jvm")
+    id("maven-publish")
 }
 
 kotlin {
     jvmToolchain(17)
+    compilerOptions {
+        jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+    }
 }
 
 java {
-    sourceCompatibility JavaVersion.VERSION_17
-    targetCompatibility JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 publishing {
     publications {
-        maven(MavenPublication) {
-            from components.java
+        create<MavenPublication>("maven") {
+            from(components.findByName("java"))
         }
     }
 }

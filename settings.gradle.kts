@@ -12,20 +12,20 @@ pluginManagement {
     }
 }
 plugins {
-    id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        mavenLocal() // Ưu tiên resolve từ local trước khi tìm trên remote
+        mavenLocal()
         google()
         mavenCentral()
-        maven { url 'https://jitpack.io' }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 
 rootProject.name = "Adapter"
-include ':app'
+include(":app")
 
-include ':adapter'
-include ':adapter-processor'
+include(":adapter")
+include(":adapter-processor")
